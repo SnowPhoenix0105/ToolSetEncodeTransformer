@@ -6,19 +6,21 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import top.snowphoenix.toolsetencodetransformer.config.FileConfig;
+import top.snowphoenix.toolsetencodetransformer.dao.RedisDao;
 import top.snowphoenix.toolsetencodetransformer.model.FileInfo;
 
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class FileService {
     // TODO Constructor
 
-    private StringRedisTemplate redisTemplate;
+    private RedisDao redisDao;
     private FileConfig fileConfig;
 
     private ArrayList<FileInfo> saveFiles(Path workDirPath, MultipartFile[] files) throws IOException {
@@ -54,24 +56,18 @@ public class FileService {
 
         var fileInfos = saveFiles(workDirPath, files);
 
-        redisTemplate.multi();
+        String key = "files:" + uid;
         try {
-            String key = "files:" + uid;
-            redisTemplate.delete(key);
-            var listOps = redisTemplate.opsForList();
-            for (var fileInfo : fileInfos) {
-                listOps.rightPush(key, fileInfo.getName());
-            }
-            redisTemplate.expire(key, 30, TimeUnit.MINUTES);
+            redisDao.setList(
+                    key,
+                    fileInfos.stream().map(FileInfo::getName).collect(Collectors.toList()),
+                    30,
+                    TimeUnit.MINUTES);
         }
         catch (Exception e) {
             log.warn("save(int, MultipartFile[]) wrong with redis operations", e);
-            redisTemplate.discard();
             Files.deleteIfExists(workDirPath);
             throw e;
-        }
-        finally {
-            redisTemplate.exec();
         }
         return fileInfos;
     }

@@ -5,3 +5,7 @@ spring:
     password: usercenter
 server:
   port: 8002
+jwt:
+  public-key-path: ./pem/pub.pem
+files:
+  work-dir: ./workDir
