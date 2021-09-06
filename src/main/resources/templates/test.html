@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head xmlns:v-on="http://www.w3.org/1999/xhtml">
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+<!--    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">-->
+    <title>test</title>
+</head>
+<!-- import Vue before Element -->
+<script src="https://unpkg.com/vue@next"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<!-- import JavaScript -->
+<!--<script src="https://unpkg.com/element-ui/lib/index.js"></script>-->
+<body>
+<div id="app">
+    Test：<input id="upload_file" type="file" multiple @change="setFiles" webkitdirectory="true" mozdirectory="true"/><br/>
+<!--    选择多个文件：<input @change="getFiles($event)" name="files" type="file" multiple="multiple" /><br />-->
+<!--    选择文件夹，遍历该文件夹下所有文件：<input @change="getFiles($event)" name="files" type="file" webkitdirectory mozdirectory /><br />-->
+    <button @click="upload" type="submit">上传</button>
+</div>
+</body>
+<script>
+    const App = {
+        data() {
+            console.log("startup");
+            return {
+                files: []
+            }
+        },
+        methods: {
+            setFiles(event) {
+                console.log("setFiles called");
+                let files = event.target.files;
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    this.files.push(file);
+                    console.dir(file)
+                }
+            },
+            upload() {
+                console.log("upload called");
+                let formData = new FormData();
+                for (let i = 0; i < this.files.length; i++) {
+                    formData.append('files', this.files[i]);
+                }
+                axios.post("/file/upload", formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                }).then(function(response) {
+                    // 请求成功
+                }, function(err) {
+
+                })
+            }
+        }
+    }
+    Vue.createApp(App).mount("#app")
+</script>
