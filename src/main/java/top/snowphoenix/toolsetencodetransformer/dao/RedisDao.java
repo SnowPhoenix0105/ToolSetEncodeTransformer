@@ -11,6 +11,10 @@ import java.util.concurrent.TimeUnit;
 public class RedisDao {
     private StringRedisTemplate redisTemplate;
 
+    public StringRedisTemplate getRedisTemplate() {
+        return redisTemplate;
+    }
+
     @Transactional
     public void setList(String key, Iterable<String> list, long timeout, TimeUnit timeUnit) {
         redisTemplate.delete(key);
