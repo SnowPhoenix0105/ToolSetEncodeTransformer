@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import top.snowphoenix.toolsetencodetransformer.config.FileConfig;
 import top.snowphoenix.toolsetencodetransformer.dao.RedisDao;
+import top.snowphoenix.toolsetencodetransformer.model.Encoding;
 import top.snowphoenix.toolsetencodetransformer.model.FileInfo;
 
 import java.util.List;
@@ -42,7 +43,14 @@ public class CacheManager {
                 .collect(Collectors.toList());
     }
 
-    public void setSelectFiles(Map<Integer, Integer> fidEncodingMap) {
-
+    public void setSelectFiles(int uid, Map<Integer, Encoding> fidEncodingMap) {
+        // TODO
     }
+
+    public Map<Integer, Encoding> getSelectedFiles(int uid) {
+        // TODO
+        return null;
+    }
+
+
 }

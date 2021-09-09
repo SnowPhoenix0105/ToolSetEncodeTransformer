@@ -4,10 +4,7 @@ import org.springframework.stereotype.Component;
 import top.snowphoenix.toolsetencodetransformer.config.CharSetConfig;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -38,6 +35,24 @@ public class CharSetUtil {
     }
 
     private final Map<CharSet, CharSetWorker> workers;
+    private final static List<CharSet> COMMON_LATIN_CONTAINS = Arrays.asList(
+            CharSet.UPPER,
+            CharSet.LOWER,
+            CharSet.NUMBER,
+            CharSet.SYMBOL
+    );
+
+    public ArrayList<CharSetWorker> getWorkers(Set<CharSet> charSets) {
+        ArrayList<CharSetWorker> ret = new ArrayList<>();
+        if (charSets.remove(CharSet.COMMON_LATIN) || charSets.containsAll(COMMON_LATIN_CONTAINS)) {
+            COMMON_LATIN_CONTAINS.forEach(charSets::remove);
+            ret.add(workers.get(CharSet.COMMON_LATIN));
+        }
+        for (CharSet charSet : charSets) {
+            ret.add(workers.get(charSet));
+        }
+        return ret;
+    }
 
     public CharSetWorker getWorker(CharSet charSet) {
         return workers.get(charSet);
