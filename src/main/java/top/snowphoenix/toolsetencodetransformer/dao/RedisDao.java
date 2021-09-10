@@ -39,8 +39,30 @@ public class RedisDao {
         redisTemplate.expire(key, timeout, timeUnit);
     }
 
+    public <T> void setHashValue(String key, String hashKey, T value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
+
+    public String getHashValue(String key, String hashKey) {
+        return redisTemplate.<String, String>opsForHash().get(key, hashKey);
+    }
+
     public Map<String, String> getHash(String key) {
         return redisTemplate.<String, String>opsForHash().entries(key);
+    }
+
+    @Transactional
+    public <T> void setValue(String key, T value, long timeout, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value.toString());
+        redisTemplate.expire(key, timeout, timeUnit);
+    }
+
+    public <T> void setValue(String key, T value) {
+        redisTemplate.opsForValue().set(key, value.toString());
+    }
+
+    public String getValue(String key) {
+        return redisTemplate.opsForValue().get(key);
     }
 
     /**

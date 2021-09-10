@@ -1,16 +1,14 @@
 package top.snowphoenix.toolsetencodetransformer.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
+@ConfigurationProperties("redis")
+@Getter
+@Setter
 public class RedisConfig {
-    @Bean
-    public StringRedisTemplate redisTemplate(RedisConnectionFactory factory) {
-        StringRedisTemplate template = new StringRedisTemplate(factory);
-        template.setEnableTransactionSupport(true);
-        return template;
-    }
+    private long timeoutMinute;
 }

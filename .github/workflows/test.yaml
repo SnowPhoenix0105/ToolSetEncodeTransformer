@@ -43,3 +43,12 @@ jobs:
       with:
         name: ToolSetEncodeTransformer_UnitTestReport
         path: report
+
+    - name: Generate Javadoc
+      run: mvn javadoc:javadoc && cp -r ./target/site/apidoc ./javadoc 
+
+    - name: Packup TestReport
+      uses: actions/upload-artifact@v2
+      with:
+        name: ToolSetEncodeTransformer_ApiDoc
+        path: javadoc

@@ -10,6 +10,6 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 public class FileConfig {
-    private String workDir;
-    private long timeoutMinute;
+    private String originDir;
+    private String transformedDir;
 }

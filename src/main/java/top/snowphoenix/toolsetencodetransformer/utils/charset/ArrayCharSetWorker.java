@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ArrayCharSetWorker implements CharSetWorker {
+class ArrayCharSetWorker implements CharSetWorker {
     public static ArrayCharSetWorker fromFile(String path) throws IOException {
         var lines = Files.readAllLines(Paths.get(path));
         String all;

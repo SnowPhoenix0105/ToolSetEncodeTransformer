@@ -68,6 +68,10 @@ public enum CharSet {
         return null;
     }
 
+    public String getName() {
+        return name.get(this);
+    }
+
     public String getDesc() {
         return desc.get(this);
     }

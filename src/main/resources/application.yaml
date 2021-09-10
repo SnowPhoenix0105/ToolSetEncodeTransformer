@@ -11,7 +11,8 @@ server:
 jwt:
   public-key-path: ./pem/pub.pem
 files:
-  work-dir: ./workDir
+  transformed-dir: ./workDir/transformed
+  origin-dir: ./workDir/origin
 charset:
   file-path:
     common3500: ./charSet/common3500.txt

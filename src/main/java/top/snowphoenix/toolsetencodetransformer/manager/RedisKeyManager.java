@@ -1,5 +1,10 @@
 package top.snowphoenix.toolsetencodetransformer.manager;
 
+import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
+
+@Component
 public class RedisKeyManager {
     public String fileList(int uid) {
         return "files:" + uid;
@@ -15,5 +20,14 @@ public class RedisKeyManager {
 
     public String charsetList(int uid) {
         return "charset:" + uid;
+    }
+
+    public Iterable<String> allKeysForUser(int uid) {
+        return Arrays.asList(
+                fileList(uid),
+                fileSelectHash(uid),
+                targetEncoding(uid),
+                charsetList(uid)
+        );
     }
 }

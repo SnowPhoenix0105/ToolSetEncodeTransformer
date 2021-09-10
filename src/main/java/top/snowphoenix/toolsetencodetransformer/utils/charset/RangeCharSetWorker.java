@@ -2,7 +2,7 @@ package top.snowphoenix.toolsetencodetransformer.utils.charset;
 
 import lombok.var;
 
-public class RangeCharSetWorker implements CharSetWorker {
+class RangeCharSetWorker implements CharSetWorker {
     public RangeCharSetWorker(long min, long max) {
         this.min = min;
         this.max = max;
