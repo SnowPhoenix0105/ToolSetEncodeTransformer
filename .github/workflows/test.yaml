@@ -36,7 +36,7 @@ jobs:
       run: mvn --batch-mode test
 
     - name: Generate JaCoCo Report
-      run: mvn jacoco:report && cp -r ./target/site/jacoco ./report 
+      run: mvn --batch-mode jacoco:report && cp -r ./target/site/jacoco ./report 
 
     - name: Packup TestReport
       uses: actions/upload-artifact@v2
@@ -45,7 +45,7 @@ jobs:
         path: report
 
     - name: Generate Javadoc
-      run: mvn javadoc:javadoc && cp -r ./target/site/apidoc ./javadoc 
+      run: mvn --batch-mode javadoc:javadoc && cp -r ./target/site/apidocs ./javadoc 
 
     - name: Packup TestReport
       uses: actions/upload-artifact@v2
