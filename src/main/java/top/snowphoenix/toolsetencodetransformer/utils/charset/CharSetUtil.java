@@ -15,16 +15,16 @@ public class CharSetUtil {
 
         workers.put(CharSet.LOWER, new RangeCharSetWorker('a', 'z'));
         workers.put(CharSet.UPPER, new RangeCharSetWorker('A', 'Z'));
-        workers.put(CharSet.NUMBER, new RangeCharSetWorker('0', '1'));
+        workers.put(CharSet.NUMBER, new RangeCharSetWorker('0', '9'));
         workers.put(CharSet.SYMBOL, new ArrayCharSetWorker(new ArrayList<Character>() {{
-            addAll(IntStream.range(' ', '/').mapToObj(i -> (char) i).collect(Collectors.toList()));
-            addAll(IntStream.range(':', '@').mapToObj(i -> (char) i).collect(Collectors.toList()));
-            addAll(IntStream.range('[', '`').mapToObj(i -> (char) i).collect(Collectors.toList()));
-            addAll(IntStream.range('{', '~').mapToObj(i -> (char) i).collect(Collectors.toList()));
+            addAll(IntStream.range(' ', '/' + 1).mapToObj(i -> (char) i).collect(Collectors.toList()));
+            addAll(IntStream.range(':', '@' + 1).mapToObj(i -> (char) i).collect(Collectors.toList()));
+            addAll(IntStream.range('[', '`' + 1).mapToObj(i -> (char) i).collect(Collectors.toList()));
+            addAll(IntStream.range('{', '~' + 1).mapToObj(i -> (char) i).collect(Collectors.toList()));
             addAll(Arrays.asList('\t', '\n', '\r'));
         }}));
         workers.put(CharSet.COMMON_LATIN, new ArrayCharSetWorker(new ArrayList<Character>() {{
-            addAll(IntStream.range(' ', '~').mapToObj(i -> (char) i).collect(Collectors.toList()));
+            addAll(IntStream.range(' ', '~' + 1).mapToObj(i -> (char) i).collect(Collectors.toList()));
             addAll(Arrays.asList('\t', '\n', '\r'));
         }}));
         workers.put(CharSet.BASIC_CHINESE, new RangeCharSetWorker('一', '龥'));
@@ -35,7 +35,7 @@ public class CharSetUtil {
     }
 
     private final Map<CharSet, CharSetWorker> workers;
-    private final static List<CharSet> COMMON_LATIN_CONTAINS = Arrays.asList(
+    public final static List<CharSet> COMMON_LATIN_CONTAINS = Arrays.asList(
             CharSet.UPPER,
             CharSet.LOWER,
             CharSet.NUMBER,
