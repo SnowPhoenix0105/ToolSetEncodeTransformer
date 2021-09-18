@@ -10,6 +10,8 @@ import top.snowphoenix.toolsetencodetransformer.manager.FilePathManager;
 import top.snowphoenix.toolsetencodetransformer.model.Encoding;
 import top.snowphoenix.toolsetencodetransformer.model.FileInfo;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
@@ -33,8 +35,7 @@ public class FileService {
     private final CacheManager cacheManager;
 
     private ArrayList<FileInfo> saveFiles(Path workDirPath, MultipartFile[] files) throws IOException {
-        Files.deleteIfExists(workDirPath);
-        Files.createDirectories(workDirPath);
+        filePath.ensureAndClearDir(workDirPath);
 
         ArrayList<FileInfo> fileInfos = new ArrayList<>();
         try {
@@ -54,7 +55,7 @@ public class FileService {
         }
         catch (Exception e) {
             log.warn("save(int, MultipartFile[]) wrong with file operations", e);
-            Files.deleteIfExists(workDirPath);
+            filePath.ensureAndClearDir(workDirPath);
             throw e;
         }
         return fileInfos;
@@ -100,7 +101,7 @@ public class FileService {
                         FileInfo::getFid,
                         FileInfo::getName));
 
-        ZipOutputStream zipOutputStream = new ZipOutputStream(outputStream);
+        ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
         zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
         for (int fid : fids) {
             zipOutputStream.putNextEntry(new ZipEntry(fidToName.get(fid)));
@@ -108,5 +109,7 @@ public class FileService {
             Files.copy(path, zipOutputStream);
             zipOutputStream.closeEntry();
         }
+        zipOutputStream.flush();
+        zipOutputStream.close();
     }
 }

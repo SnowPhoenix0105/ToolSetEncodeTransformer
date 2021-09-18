@@ -30,6 +30,7 @@ public class CharSetController {
     public static class CharSetInfo {
         private int cid;
         private String name;
+        private String desc;
     }
 
     @GetMapping("/list")
@@ -38,6 +39,7 @@ public class CharSetController {
                 .map(charSet -> CharSetInfo.builder()
                         .cid(charSet.getCid())
                         .name(charSet.getName())
+                        .desc(charSet.getDesc())
                         .build())
                 .collect(Collectors.toList())
                 ;

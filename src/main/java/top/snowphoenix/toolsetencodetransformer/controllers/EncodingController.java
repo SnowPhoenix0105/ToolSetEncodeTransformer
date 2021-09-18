@@ -34,8 +34,8 @@ public class EncodingController {
     @Builder
     public static class TransformBaseInfo {
         private ArrayList<Integer> selected;
-        private ArrayList<Integer> unselected;
-        private ArrayList<Integer> charSet;
+        // private ArrayList<Integer> unselected;
+        private ArrayList<Integer> charset;
         private String target;
     }
 
@@ -49,7 +49,7 @@ public class EncodingController {
 
         var fidEncodingMap = encodingService.judgeAndTransform(
                 uid,
-                transformBaseInfo.getCharSet().stream()
+                transformBaseInfo.getCharset().stream()
                         .map(CharSet::ofCid)
                         .collect(Collectors.toSet()),
                 transformBaseInfo.getSelected(),

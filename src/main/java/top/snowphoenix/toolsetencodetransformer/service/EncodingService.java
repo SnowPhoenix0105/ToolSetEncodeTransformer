@@ -42,8 +42,7 @@ public class EncodingService {
         cacheManager.setCharSets(uid, selectedCharSets);
 
         Path targetDir = filePath.transformedFileDir(uid);
-        Files.deleteIfExists(targetDir);
-        Files.createDirectories(targetDir);
+        filePath.ensureAndClearDir(targetDir);
 
         var workers = charSetUtil.getWorkers(selectedCharSets);
 
@@ -94,7 +93,9 @@ public class EncodingService {
             CharBuffer charBuffer = encoding.getCharset().decode(ByteBuffer.wrap(bytes));
             int successCount = 0;
             char[] chars = charBuffer.array();
-            for (char c : chars) {
+            int limit = charBuffer.limit();
+            for (int i = 0; i < limit; i ++) {
+                char c = chars[i];
                 for (var worker : workers) {
                     if (worker.contains(c)) {
                         successCount++;
@@ -102,22 +103,28 @@ public class EncodingService {
                     }
                 }
             }
-            if (successCount == chars.length) {
+            if (successCount == limit) {
+                maxCorrectRate = 1;
                 maxCorrectCharBuffer = charBuffer;
+                maxCorrectEncoding = encoding;
                 break;
             }
-            double correctRate = successCount / (double) chars.length;
+            double correctRate = successCount / (double) limit;
             if (correctRate >= maxCorrectRate) {
                 maxCorrectRate = correctRate;
                 maxCorrectCharBuffer = charBuffer;
+                maxCorrectEncoding = encoding;
             }
         }
 
         Path dstPath = filePath.transformedFile(uid, fid);
 
         if (maxCorrectCharBuffer != null) {
+            ByteBuffer bb = targetEncoding.getCharset().encode(maxCorrectCharBuffer);
+            byte[] exactBytes = new byte[bb.limit()];
+            bb.get(exactBytes);
             Files.write(dstPath,
-                    targetEncoding.getCharset().encode(maxCorrectCharBuffer).array(),
+                    exactBytes,
                     StandardOpenOption.CREATE);
         }
 

@@ -55,30 +55,32 @@ public class UserValidationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        AuthLevel minLevel = getMinLevel(handlerMethod);
-        if (minLevel == null) {
-            return true;
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            AuthLevel minLevel = getMinLevel(handlerMethod);
+            if (minLevel == null) {
+                return true;
+            }
+            String token = request.getHeader("Authorization");
+            if (token == null) {
+                setUnauthorized(response);
+                return false;
+            }
+            CurrentUserInfo userInfo;
+            try {
+                userInfo = buildCurrentUserFromToken(token);
+            }
+            catch (Exception e) {
+                setUnauthorized(response);
+                log.warn("build userInfo from token \"" + token + "\" fail: ", e);
+                return false;
+            }
+            if (userInfo.getAuth().toNum() < minLevel.toNum()) {
+                setUnauthorized(response);
+                return false;
+            }
+            request.setAttribute(CurrentUser.class.getSimpleName(), userInfo);
         }
-        String token = request.getHeader("Authorization");
-        if (token == null) {
-            setUnauthorized(response);
-            return false;
-        }
-        CurrentUserInfo userInfo;
-        try {
-            userInfo = buildCurrentUserFromToken(token);
-        }
-        catch (Exception e) {
-            setUnauthorized(response);
-            log.warn("build userInfo from token \"" + token + "\" fail: ", e);
-            return false;
-        }
-        if (userInfo.getAuth().toNum() < minLevel.toNum()) {
-            setUnauthorized(response);
-            return false;
-        }
-        request.setAttribute(CurrentUser.class.getSimpleName(), userInfo);
         return true;
     }
 }
