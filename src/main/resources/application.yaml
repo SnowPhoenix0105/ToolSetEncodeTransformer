@@ -17,3 +17,5 @@ charset:
   file-path:
     common3500: ./charSet/common3500.txt
     common7000: ./charSet/common7000.txt
+redis:
+  timeout-minute: 30

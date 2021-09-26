@@ -16,7 +16,8 @@ public enum CharSet {
     COMMON_LATIN,
     BASIC_CHINESE,
     COMMON_CHINESE_3500,
-    COMMON_CHINESE_7000
+    COMMON_CHINESE_7000,
+    CHINESE_SYMBOL
     ;
 
     private static final Map<CharSet, String> desc = new HashMap<CharSet, String>(){{
@@ -28,6 +29,7 @@ public enum CharSet {
         put(BASIC_CHINESE, "汉字基础集合，Unicode从4E00至9FA5");
         put(COMMON_CHINESE_3500, "汉字通用集合，3500字");
         put(COMMON_CHINESE_7000, "汉字通用集合，7000字");
+        put(CHINESE_SYMBOL, "中文符号");
     }};
 
     private static final Map<CharSet, String> name = new HashMap<CharSet, String>(){{
@@ -39,6 +41,7 @@ public enum CharSet {
         put(BASIC_CHINESE, "基本汉字");
         put(COMMON_CHINESE_3500, "通用汉字3500");
         put(COMMON_CHINESE_7000, "通用汉字7000");
+        put(CHINESE_SYMBOL, "中文符号，全角符号");
     }};
 
     public static void checkSetContainsAll(String name, Iterable<CharSet> iterable) {

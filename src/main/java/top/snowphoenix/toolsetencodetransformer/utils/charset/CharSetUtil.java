@@ -30,6 +30,12 @@ public class CharSetUtil {
         workers.put(CharSet.BASIC_CHINESE, new RangeCharSetWorker('一', '龥'));
         workers.put(CharSet.COMMON_CHINESE_3500, ArrayCharSetWorker.fromFile(config.getCommon3500()));
         workers.put(CharSet.COMMON_CHINESE_7000, ArrayCharSetWorker.fromFile(config.getCommon7000()));
+        workers.put(CharSet.CHINESE_SYMBOL, new ArrayCharSetWorker(
+                '–', '—', '‘', '’', '“', '”',
+                '…', '、', '。', '〈', '〉', '《',
+                '》', '「', '」', '『', '』', '【',
+                '】', '〔', '〕', '！', '（', '）',
+                '，', '．', '：', '；', '？'));
 
         CharSet.checkSetContainsAll("CharSetUtil.workers", workers.keySet());
     }
