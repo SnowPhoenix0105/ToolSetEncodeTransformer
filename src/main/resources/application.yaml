@@ -3,3 +3,19 @@ spring:
     url: jdbc:mysql://localhost:3306/toolsetusercenter?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
     username: toolsetusercenter
     password: usercenter
+  redis:
+    host: localhost
+    port: 6379
+server:
+  port: 8002
+jwt:
+  public-key-path: ./pem/pub.pem
+files:
+  transformed-dir: ./workDir/transformed
+  origin-dir: ./workDir/origin
+charset:
+  file-path:
+    common3500: ./charSet/common3500.txt
+    common7000: ./charSet/common7000.txt
+redis:
+  timeout-minute: 30
