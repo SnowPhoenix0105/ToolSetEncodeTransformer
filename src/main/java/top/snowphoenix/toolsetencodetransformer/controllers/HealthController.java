@@ -1,4 +1,4 @@
-package top.snowphonix.toolsetusercenter.controllers;
+package top.snowphonix.toolsetencodetransformer.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
