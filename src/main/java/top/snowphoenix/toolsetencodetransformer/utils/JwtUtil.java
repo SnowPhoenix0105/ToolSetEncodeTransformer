@@ -28,6 +28,9 @@ import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.List;
 
+/***
+ * JWT认证工具
+ */
 @Component
 public class JwtUtil {
     private final PublicKey publicKey;

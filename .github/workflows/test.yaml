@@ -47,7 +47,7 @@ jobs:
     - name: Generate Javadoc
       run: mvn --batch-mode javadoc:javadoc && cp -r ./target/site/apidocs ./javadoc 
 
-    - name: Packup TestReport
+    - name: Packup ApiDoc
       uses: actions/upload-artifact@v2
       with:
         name: ToolSetEncodeTransformer_ApiDoc

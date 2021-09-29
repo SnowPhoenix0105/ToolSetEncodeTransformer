@@ -30,6 +30,19 @@ public class EncodingService {
     private final FilePathManager filePath;
     private final CacheManager cacheManager;
 
+    /***
+     * 判断uid和若干fid指定的文件的编码，并将其转码为目标编码进行保存。
+     * 对于每一个文件，按照若干编码方式解码后，统计在指定字符集中的字符数量，比例最高的作为最终判断结果。
+     * 将用户的目标编码、选择的字符集保存到缓存中。
+     *
+     * @param uid 用户ID
+     * @param selectedCharSets 指定的字符集
+     * @param selectedFids 选择的文件ID
+     * @param targetEncoding 目标编码
+     * @return fid->编码判断结果的映射
+     * @throws IOException 发生io错误
+     * @throws TimeoutException 会话超时，指缓存中的用户信息过期
+     */
     public Map<Integer, Encoding> judgeAndTransform(
             int uid,
             Set<CharSet> selectedCharSets,
@@ -56,6 +69,15 @@ public class EncodingService {
         return ret;
     }
 
+    /***
+     * 将指定文件按照特定编码读入，转换为目标编码，并保存。
+     *
+     * @param uid 用户ID
+     * @param fid 文件ID
+     * @param newEncoding 读入的编码方式
+     * @throws TimeoutException 会话超时，指缓存中的用户信息过期
+     * @throws IOException 发生io错误
+     */
     public void modifyAndTransform(int uid, int fid, Encoding newEncoding)
             throws TimeoutException, IOException {
         if (!cacheManager.refreshExpire(uid)) {

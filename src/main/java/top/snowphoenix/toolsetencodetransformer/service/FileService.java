@@ -11,7 +11,6 @@ import top.snowphoenix.toolsetencodetransformer.model.Encoding;
 import top.snowphoenix.toolsetencodetransformer.model.FileInfo;
 
 import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.*;
@@ -34,6 +33,14 @@ public class FileService {
     private final FilePathManager filePath;
     private final CacheManager cacheManager;
 
+    /***
+     * 将文件保存到文件系统中，并为每个文件生成唯一的fid来进行标识。
+     *
+     * @param workDirPath 工作路径
+     * @param files 需要保存的文件
+     * @return 文件名和文件fid的列表
+     * @throws IOException 发生了io错误
+     */
     private ArrayList<FileInfo> saveFiles(Path workDirPath, MultipartFile[] files) throws IOException {
         filePath.ensureAndClearDir(workDirPath);
 
@@ -61,6 +68,14 @@ public class FileService {
         return fileInfos;
     }
 
+    /***
+     * 为用户保存文件，并为每个文件创建唯一的fid用于表示。
+     *
+     * @param uid 用户ID
+     * @param files 需要保存的文件
+     * @return 文件名和文件fid的列表
+     * @throws IOException 发生了io错误
+     */
     public ArrayList<FileInfo> saveFilesForUser(int uid, MultipartFile[] files) throws IOException {
         Path workDirPath = filePath.originFileDir(uid);
 
@@ -78,6 +93,15 @@ public class FileService {
         return fileInfos;
     }
 
+    /***
+     * 获取转码后的文件的内容
+     *
+     * @param uid 用户ID
+     * @param fid 文件ID
+     * @return 文件的内容
+     * @throws TimeoutException 会话超时，指缓存中的用户信息过期
+     * @throws IOException 发生了io错误
+     */
     public String getTransformedFileContent(int uid, int fid) throws TimeoutException, IOException {
         if (!cacheManager.refreshExpire(uid)) {
             throw new TimeoutException();
@@ -89,6 +113,14 @@ public class FileService {
         return String.join("\n", lines);
     }
 
+    /***
+     * 将用户的所有转码后的文件通过单个压缩包的方式保存到指定stream中。
+     *
+     * @param uid 用户ID
+     * @param outputStream 输出的流
+     * @throws TimeoutException 会话超时，指缓存中的用户信息过期
+     * @throws IOException 发生了io错误
+     */
     public void packTransformedFiles(int uid, OutputStream outputStream) throws TimeoutException, IOException {
         if (!cacheManager.refreshExpire(uid)) {
             throw new TimeoutException();

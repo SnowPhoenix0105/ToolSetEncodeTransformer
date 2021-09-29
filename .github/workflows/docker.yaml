@@ -35,6 +35,15 @@ jobs:
         name: ToolSetEncodeTransformer_Jar
         path: target/ToolSetEncodeTransformer.jar
 
+    - name: Generate Javadoc
+      run: mvn --batch-mode javadoc:javadoc && cp -r ./target/site/apidocs ./javadoc 
+
+    - name: Packup ApiDoc
+      uses: actions/upload-artifact@v2
+      with:
+        name: ToolSetEncodeTransformer_ApiDoc
+        path: javadoc
+
   pull-to-docker-hub:
 
     runs-on: ubuntu-latest

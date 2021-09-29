@@ -8,7 +8,17 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/***
+ * 通过枚举字符的方法创建的字符集工作类
+ */
 class ArrayCharSetWorker implements CharSetWorker {
+    /***
+     * 将目标文件中的所有字符作为字符集的内容
+     *
+     * @param path 文件路径
+     * @return 文件中字符构成的字符集工作类
+     * @throws IOException 读取文件时发生了io错误
+     */
     public static ArrayCharSetWorker fromFile(String path) throws IOException {
         var lines = Files.readAllLines(Paths.get(path));
         String all;

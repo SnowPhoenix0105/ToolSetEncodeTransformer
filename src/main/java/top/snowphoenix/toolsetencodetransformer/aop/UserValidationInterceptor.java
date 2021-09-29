@@ -13,6 +13,9 @@ import top.snowphoenix.toolsetencodetransformer.utils.JwtUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/***
+ * 实现{@code @RequireAuthWithLevel}注解的功能。
+ */
 @Component
 @Slf4j
 public class UserValidationInterceptor implements HandlerInterceptor {
@@ -20,6 +23,9 @@ public class UserValidationInterceptor implements HandlerInterceptor {
         this.jwtUtil = jwtUtil;
     }
 
+    /***
+     * 用户Authorization头的前缀
+     */
     public static final String AUTH_PREFIX = "Bearer ";
     private final JwtUtil jwtUtil;
 
@@ -35,6 +41,11 @@ public class UserValidationInterceptor implements HandlerInterceptor {
         return classAnnotation.value();
     }
 
+    /***
+     * 判断用户鉴权失败后的进行响应
+     *
+     * @param response 响应对象
+     */
     private void setUnauthorized(HttpServletResponse response) {
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         /*
@@ -46,6 +57,13 @@ public class UserValidationInterceptor implements HandlerInterceptor {
          */
     }
 
+    /***
+     * 通过用户Authorization头的内容进行鉴权，并生成当前用户的信息。失败时返回null。
+     * 如果token参数中包含{@code AUTH)PREFIX}，则将该前缀忽略。
+     *
+     * @param token 用户的Authorization头的内容
+     * @return 当验证失败时，返回null
+     */
     private CurrentUserInfo buildCurrentUserFromToken(String token) {
         if (token.startsWith(AUTH_PREFIX)) {
             token = token.substring(AUTH_PREFIX.length());
@@ -75,7 +93,7 @@ public class UserValidationInterceptor implements HandlerInterceptor {
                 log.warn("build userInfo from token \"" + token + "\" fail: ", e);
                 return false;
             }
-            if (userInfo.getAuth().toNum() < minLevel.toNum()) {
+            if (userInfo == null || userInfo.getAuth().toNum() < minLevel.toNum()) {
                 setUnauthorized(response);
                 return false;
             }
